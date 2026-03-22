@@ -1,5 +1,6 @@
 package com.swapnil.jetchat.feature.editProfile
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,17 +30,23 @@ import kotlinx.coroutines.launch
 
 @Preview
 @Composable
-fun EditProfileScreen(modifier: Modifier = Modifier) {
+fun EditProfileScreen(email: String) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    Scaffold(snackbarHost = { SnackbarHost(hostState =snackbarHostState,modifier= Modifier.imePadding()) },topBar = { ChatAppBar("Edit Profile") }) { paddingValues ->
+    Scaffold(snackbarHost = {
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.imePadding()
+        )
+    }, topBar = { ChatAppBar("Edit Profile") }) { paddingValues ->
         var name by remember { mutableStateOf("") }
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -48,20 +55,34 @@ fun EditProfileScreen(modifier: Modifier = Modifier) {
                 },
                 label = { Text("Name") })
 
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = email,
+                readOnly = true,
+                enabled = email.isEmpty(),
+                onValueChange = {
+
+                },
+                label = { Text("Email") })
+
             // "     " ->!Empty,blank
             //Empty -> len = 0
             //Blank -> len=0 || only space
-            Button(modifier= Modifier.padding(24.dp).align(Alignment.CenterHorizontally),onClick = {
-                if(name.isNotBlank()){
-                    scope.launch {
-                        snackbarHostState.showSnackbar("Name is $name")
+            Button(
+                modifier = Modifier
+                    .padding(24.dp)
+                    .align(Alignment.CenterHorizontally),
+                onClick = {
+                    if (name.isNotBlank()) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Name is $name")
+                        }
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Please input your name")
+                        }
                     }
-                }else{
-                    scope.launch {
-                        snackbarHostState.showSnackbar("Please input your name")
-                    }
-                }
-            }) {
+                }) {
                 Text("Save")
             }
 
