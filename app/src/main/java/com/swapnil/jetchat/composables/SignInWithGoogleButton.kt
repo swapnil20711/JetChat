@@ -1,4 +1,4 @@
-package com.swapnil.jetchat.feature.login
+package com.swapnil.jetchat.composables
 
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
